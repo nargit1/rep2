@@ -1296,7 +1296,8 @@ class dataObject:
         self.transform(df1)
         
 #################################################################################
-_datadir = "mydata//"
+#_datadir = "mydata//"
+_datadir = ""
 
 class iicsintef:
     def __init__(self, uname):
