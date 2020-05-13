@@ -7,7 +7,7 @@ import time
 import datetime
 import pandas.core.strings as ps
 from pandas.core.accessor import CachedAccessor
-import pandas.core.groupby.generic as pg 
+#import pandas.core.groupby.generic as pg 
 
 
 _iexpr = ""
@@ -338,29 +338,8 @@ class CDIStringMethods(ps.StringMethods):
         _iexpr =  "reg_extract("+col+",'"+pat1+"')"
         estack.pushexp()          
         return self._wrapped_pandas_method ("extract", pat=pat, flags=flags, expand=expand)
-'''
-class CDISeriesGroupBy(pg.SeriesGroupBy):
-    def __init__(self, obj, *args, **kwargs):
-        super(CDISeriesGroupBy, self).__init__(obj,*args, **kwargs)
-        self.pnt = obj
-    
-    def agg(self, *args, **kwargs):
-        estack.print("in agg")
-        for col, exp in kwargs.items():
-            curcols = str(self.pnt.dataobj.dfc.index.values)
-            thisdt=""
-            if (curcols.find("'"+col+"'") >0): 
-                thisdt = str(self.pnt.dataobj.dfc.at[col,'dt'])
-            aggexp = ix.cnvagg_toiics(exp,thisdt)
-            #print (aggexp)
-            self.pnt.dataobj.dfc.at[col,'ex'] = aggexp
-            #self.dataobj.dfc.at[col,'dt'] = "" 
-        global _iskip
-        _iskip == True
-        df= CDIDataFrame (super(CDIGroupBy, self).agg(*args, **kwargs))
-        _iskip == False
-        return df
-'''    
+
+'''   
 class CDIGroupBy(pg.DataFrameGroupBy):
     def __init__(self, obj, *args, **kwargs):
         super(CDIGroupBy, self).__init__(obj,*args, **kwargs)
@@ -387,7 +366,7 @@ class CDIGroupBy(pg.DataFrameGroupBy):
         _iskip == False
         estack.clear()
         return df
-    
+'''    
     
 
 class CDISeries(pd.Series):
@@ -919,30 +898,13 @@ class CDIDataFrame(pd.DataFrame):
         global _iskip
         bskip = _iskip
         _iskip= True    
-        '''
+
         s1 = super(CDIDataFrame,self).groupby(by=by, axis=axis, level=level, as_index=as_index, sort=sort, group_keys=group_keys,squeeze=squeeze,observed=observed)
         _iskip=False
         #estack.print (s1.__class__)
-        s1 = CDIGroupBy(s1)
+       
         return s1
-    '''    
-        if level is None and by is None:
-            raise TypeError("You have to supply one of 'by' and 'level'")
-        axis = self._get_axis_number(axis)     
-        
-        cgb=  CDIGroupBy(
-            obj=self,
-            keys=by,
-            axis=axis,
-            level=level,
-            as_index=as_index,
-            sort=sort,
-            group_keys=group_keys,
-            squeeze=squeeze,
-            observed=observed,
-        )
-        _iskip=bskip
-        return cgb
+ 
     
 
      
